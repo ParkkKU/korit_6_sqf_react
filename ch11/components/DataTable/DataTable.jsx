@@ -10,7 +10,7 @@ function DataTable() {
 
     return (
         <div className="table-main-container">
-            <DataTableHeader mode={mode} setMode={setMode}/>
+            <DataTableHeader mode={mode} setMode={setMode} setProducts={setProducts} />
             <DataTableBody mode={mode} products={products} />
         </div>
     );

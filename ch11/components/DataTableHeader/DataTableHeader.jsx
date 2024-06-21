@@ -1,6 +1,14 @@
+import { useRef } from "react";
 import "./style.css"
 
-function DataTableHeader({ mode, setMode }) {
+function DataTableHeader({ mode, setMode, setProducts }) {
+
+    const inputRef = {
+        productName: useRef(),
+        size: useRef(),
+        color: useRef(),
+        price: useRef()
+    }
 
     const handleChangeModeClick = (e) => {
         setMode(parseInt(e.target.value));
@@ -26,14 +34,37 @@ function DataTableHeader({ mode, setMode }) {
     const resetMode = () => {
         setMode(0);
     }
+
+    
+    const handleProductAdd = (e) => {
+        const { productName, size, color, price } = inputRef;
+        if(e.keyCode === 13) {
+            switch(e.target.name) {
+                case "productName":
+                    size.current.focus();
+                    break;
+                case "size":
+                    color.current.focus();
+                    break;
+                case "color":
+                    price.current.focus();
+                    break;
+                case "price":
+                    productName.current.focus();
+                    // setProducts(productList => [productList, ...]);
+                    break;
+                default:
+            }
+        }
+    }
     
     return (
         <header className="table-header">
             <div className="input-group">
-                <input type="text" disabled={mode === 0 || mode === 3} placeholder="상품명" autoFocus/>
-                <input type="text" disabled={mode === 0 || mode === 3} placeholder="사이즈" />
-                <input type="text" disabled={mode === 0 || mode === 3} placeholder="색상" />
-                <input type="text" disabled={mode === 0 || mode === 3} placeholder="가격" />
+                <input name="productName" type="text" disabled={mode === 0 || mode === 3} placeholder="상품명" ref={inputRef.productName}/>
+                <input name="size" type="text" disabled={mode === 0 || mode === 3} placeholder="사이즈" ref={inputRef.size} />
+                <input name="color" type="text" disabled={mode === 0 || mode === 3} placeholder="색상" ref={inputRef.color} />
+                <input name="price" type="text" disabled={mode === 0 || mode === 3} placeholder="가격" ref={inputRef.price}/>
             </div>
             <div>
             {

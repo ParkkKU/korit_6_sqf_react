@@ -1,6 +1,8 @@
 import "./style.css"
 
 function DataTableBody({mode, products}) {
+    
+
     return (
         <div className="table-body">
             <table>
