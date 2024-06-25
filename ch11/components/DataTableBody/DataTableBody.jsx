@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./style.css"
 
-function DataTableBody({mode, setMode, products, setProducts, isDeleting, setDeleting }) {
+function DataTableBody({mode, setMode, products, setProducts, isDeleting, setDeleting, setEditProductId }) {
     const [ viewProducts, setViewProducts ] = useState([]);
     const [ checkedAll, setCheckedAll ] = useState(false);
 
@@ -9,7 +9,7 @@ function DataTableBody({mode, setMode, products, setProducts, isDeleting, setDel
         if(mode === 0) {
         resetViewProducts();
         setCheckedAll(false);
-    }
+        }
     }, [products, mode]);
 
     useEffect(() => {
@@ -33,7 +33,15 @@ function DataTableBody({mode, setMode, products, setProducts, isDeleting, setDel
             setMode(0);
             setDeleting(false);
         }
-    })
+    }, [isDeleting]);
+
+    useEffect(() => {
+        if (mode === 2) {
+            const [ selectedProduct ] = viewProducts.filter(product => product.isChecked);
+
+            setEditProductId(selectedProduct ? 0 : selectedProduct.id);
+        }
+    }, [viewProducts]);
 
     const resetViewProducts = () => {
         setViewProducts([ ...products.map(product => ({...product, isChecked: false})) ]);
@@ -53,6 +61,7 @@ function DataTableBody({mode, setMode, products, setProducts, isDeleting, setDel
     
     const handleCheckedChange = (e) => {
         if(mode === 2) {
+
             setViewProducts(viewProducts => {
                 return [ ...viewProducts.map(product => {
                     if(product.id === parseInt(e.target.value)) {

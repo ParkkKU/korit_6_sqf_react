@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import Swal from "sweetalert2";
 
-function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
+function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, editProductId }) {
 
     const emptyProduct = {
         id: "",
@@ -20,6 +20,11 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
     };
 
     const [ inputData, setInputData ] = useState({ ...emptyProduct });
+
+    useEffect(() => {
+        const [ product ] = products.filter(product => product.id === editProductId);
+        setInputData(!product ? {...emptyProduct} : { ...product });
+    }, [editProductId]);
 
     const handleInputChange = (e) => {
         setInputData(inputData => ({
@@ -71,24 +76,28 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
             resetMode();
         }
         if(mode === 2) {
-            switch(e.target.ref) {
-                case inputRef.productName:
-                    inputRef.size.current.focus();
-                    break;
-                case inputRef.size:
-                    inputRef.color.current.focus();
-                    break;
-                case inputRef.color:
-                    inputRef.price.current.focus();
-                    break;
-                case inputRef.price:
-                    inputRef.productName.current.focus();
-                    setProducts( products => [...products, inputData]);
-                    setInputData({...emptyProduct});
-                    break;
-                default:
-            }
-            alert("상품수정");
+            Swal.fire({
+                title: "상품 정보 수정",
+                showCancelButton: true,
+                confirmButtonText: "확인",
+                cancelButtonText: "취소",
+            }).then(result => {
+                if(result.isConfirmed) {
+                    setProducts(products => [
+                        ...products.map(product => {
+                            console.log(editProductId)
+                            if(product.id === editProductId) {
+                                const { id, ...rest } = inputData;
+                                return {
+                                    ...product,
+                                    ...rest
+                                }
+                            }
+                        })
+                    ])
+                }
+            });
+            resetMode();
         }
         if(mode === 3) {
             Swal.fire({
@@ -96,6 +105,7 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
                 text: "정말로 삭제 하시겠습니까?",
                 showCancelButton: true,
                 confirmButtonText: "삭제",
+                confirmButtonColor: "red",
                 cancelButtonText: "취소"
             }).then(result => {
                 if (result.isConfirmed) {
