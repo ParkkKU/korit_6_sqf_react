@@ -1,0 +1,9 @@
+import { atom } from "recoil";
+
+
+export const mainSidebarShowAtom = atom({
+    key : "mainSidebarShowState",
+    default : false
+})
+
+export default mainSidebarShowAtom;
