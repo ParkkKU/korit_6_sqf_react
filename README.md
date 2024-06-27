@@ -58,3 +58,9 @@
 - useLocation()
 - useParams()
 - useSearchParams()
+
+## 명명규칙
+- Component 이름은 대문자로 시작
+- 하나의 Component 폴더에는 하나의 Component.jsx 파일, style.js 파일로 구성
+- constants 폴더에 들어가는 상수들은 대문자와 스네이크 표기법을 작성
+- 이벤트 함수명은 handle로 시작해서 이벤트명으로 끝낸다.
